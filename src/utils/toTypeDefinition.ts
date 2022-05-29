@@ -72,7 +72,7 @@ export const toTypeDefinition = (
   };
 
   const EXPORT = format('keyword', 'export');
-  const IDENTIFIER = format('identifier', options.typeName || 'UnnamedType');
+  const IDENTIFIER = format('identifier', options.typeName || 'Unnamed');
   const BODY = getType(sample, 1);
 
   if (options.preferType || Array.isArray(sample)) {
@@ -84,4 +84,4 @@ export const toTypeDefinition = (
   const INTERFACE = format('keyword', 'interface');
 
   return `${EXPORT} ${INTERFACE} ${IDENTIFIER} ${BODY}`;
-}
+};

@@ -2,29 +2,21 @@ import './TypescriptGenerator.scss';
 import React from 'react';
 import { withClassNamePrefix } from '../../utils/withClassNamePrefix';
 import { toTypeDefinition } from '../../utils/toTypeDefinition';
-const ns = withClassNamePrefix('page-TypescriptGenerator');
+import { copyToClipboard } from '../../utils/copyToClipboard';
 
-const defaultCode = JSON.stringify({
-  code: 0,
-  data: {
-    list: [
-      {
-        id: 1,
-        title: 'Create react Application...'
-      }
-    ],
-    page: 1,
-    size: 10,
-  }
-}, null, 2);
+const ns = withClassNamePrefix('page-TypescriptGenerator');
+const KEY = 'TypescriptGenerator.input';
 
 export interface Props {}
 
 export const TypescriptGenerator: React.FC<Props> = () => {
-  const [sourceCode, setSourceCode] = React.useState(defaultCode);
+  const [sourceCode, setSourceCode] = React.useState(() => {
+    return sessionStorage.getItem(KEY) || '';
+  });
 
   const handleInput: React.ChangeEventHandler<HTMLTextAreaElement> = React.useCallback((e) => {
     setSourceCode(e.target.value);
+    sessionStorage.setItem(KEY, e.target.value);
   }, []);
 
   const result = React.useMemo(() => {
@@ -38,30 +30,94 @@ export const TypescriptGenerator: React.FC<Props> = () => {
                 ? `<code data-type="${type}" data-keyword="${value}">${value}</code>`
                 : `<code data-type="${type}">${value}</code>`;
             }
-          })
+          }),
+          error: ''
         };
       } catch (err: any) {
-        return err.toString();
+        return {
+          highlight: '',
+          code: '',
+          error: err.toString()
+        };
       }
     }
-    return ''
+    return {
+      code: '',
+      highlight: '',
+      error: ''
+    }
   }, [sourceCode]);
+
+  const [copyStatus, setCopyStatus] = React.useState<'success' | 'error' | 'initial'>('initial');
+  const timerIdRef = React.useRef<{ id?: number; }>({});
 
   return (
     <div className={ns('container')}>
-      <div className={ns('input')}>
-        <textarea
-          value={sourceCode}
-          onChange={handleInput}
-          placeholder="Paste the response JSON here..."
-        />
+      <div className={ns('heading')}>
+        <h1>Typescript Generator</h1>
+        <p>A devtool to generate TypeScript code from the response body JSON of RESTful APIs automatically.</p>
       </div>
-      <div className={ns('border')}></div>
-      <div className={ns('output')}>
-        <div className={ns('result')}>
-          <pre dangerouslySetInnerHTML={{
-            __html: result.highlight
-          }} />
+      <div className={ns('main')}>
+        <div className={ns('section')}>
+          <div className={ns('toolbar')}>
+            <button
+              type="button"
+              onClick={() => {
+                try {
+                  setSourceCode(JSON.stringify(JSON.parse(sourceCode), null, 2));
+                } catch (err) {
+                  // nothing
+                }
+              }}
+            >Beautify</button>
+          </div>
+          <div className={ns('content')}>
+            <textarea
+              className={ns('input')}
+              value={sourceCode}
+              onChange={handleInput}
+              placeholder="Paste the response body JSON here..."
+            />
+          </div>
+        </div>
+        <div className={ns('sep')}></div>
+        <div className={ns('section')}>
+          <div className={ns('toolbar')}>
+            <button
+              type="button"
+              onClick={() => {
+                setCopyStatus('initial');
+
+                if (timerIdRef.current.id !== undefined) {
+                  clearTimeout(timerIdRef.current.id);
+                }
+
+                copyToClipboard(result.code).then((success) => {
+                  if (success) {
+                    setCopyStatus('success');
+                    timerIdRef.current.id = window.setTimeout(() => {
+                      setCopyStatus('initial');
+                      timerIdRef.current.id = undefined;
+                    }, 2000);
+                  } else {
+                    setCopyStatus('error');
+                  }
+                });
+              }}
+            >
+              {copyStatus === 'initial' && 'Copy'}
+              {copyStatus === 'success' && 'Copied'}
+              {copyStatus === 'error' && 'Failed to copy'}
+            </button>
+          </div>
+          <div className={ns('content')}>
+            <pre
+              className={ns('output')}
+              dangerouslySetInnerHTML={{
+                __html: result.error || result.highlight
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

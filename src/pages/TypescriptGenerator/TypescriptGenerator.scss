@@ -1,83 +1,218 @@
 .page-TypescriptGenerator {
   &__container {
-    color: #333;
     position: fixed;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    display: flex;
+    color: #333;
+  }
 
-    textarea {
-      display: block;
-      box-sizing: border-box;
-      position: absolute;
-      background-color: #f5f5f5;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      border: 0;
-      resize: none;
-      padding: 1.5em;
-      font-size: 14px;
-      font-family: Consolas, 'Courier New', Courier, monospace;
+  &__heading {
+    background-color: #333;
+    color: #fff;
+    line-height: 32px;
+    padding: 16px;
 
-      &:focus {
-        outline: none;
-      }
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 0;
+      color: #eee;
     }
   }
 
-  &__input,
-  &__output {
+  &__main {
+    position: absolute;
+    left: 0;
+    top: 96px;
+    right: 0;
+    bottom: 0;
+    display: flex;
+  }
+
+  &__section {
     position: relative;
     flex-grow: 1;
     flex-shrink: 1;
     width: 50%;
+    display: flex;
+    flex-direction: column;
   }
 
-  &__border {
+  &__sep {
     width: 1px;
-    background-color: #eee;
+    background-color: #ddd;
   }
 
-  &__result {
+  &__toolbar {
+    height: 41px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border-bottom: 1px solid #ddd;
+    line-height: 40px;
+    padding: 0 14px;
+
+    button {
+      cursor: pointer;
+    }
+  }
+
+  &__content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    position: relative;
+  }
+
+  &__input,
+  &__output {
+    margin: 0;
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
     border: 0;
-    padding: 1em;
-    font-size: 14px;
+    padding: 14px;
     overflow: auto;
+    outline: none;
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    font-size: 14px;
+  }
+
+  &__input {
+    resize: none;
+    background-color: #fafafa;
+  }
+
+  &__output {
     background-color: rgb(248, 248, 255);
 
-    pre {
-      font-family: Consolas, 'Courier New', Courier, monospace;
-      margin-top: 0;
-      margin-bottom: 0;
+    code[data-type="keyword"] {
+      color: #cf222e;
+    }
 
-      code[data-type="keyword"] {
-        color: #cf222e;
-      }
+    code[data-type="identifier"] {
+      font-weight: bold;
+    }
 
-      code[data-type="identifier"] {
-        font-weight: bold;
-      }
+    code[data-type="operator"] {
+      color: #24292f;
+    }
 
-      code[data-type="operator"] {
-        color: #24292f;
-      }
+    code[data-type="key"] {
+      color: #0550ae;
+    }
 
-      code[data-type="key"] {
-        color: #0550ae;
-      }
-
-      code[data-type="type"] {
-        color: #509c93;
-      }
+    code[data-type="type"] {
+      color: #509c93;
     }
   }
 }
+
+// .page-TypescriptGenerator {
+//   &__container {
+//     color: #333;
+//     position: fixed;
+//     left: 0;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     display: flex;
+
+//     textarea {
+//       display: block;
+//       box-sizing: border-box;
+//       position: absolute;
+//       background-color: #f5f5f5;
+//       left: 0;
+//       top: 41px;
+//       right: 0;
+//       bottom: 0;
+//       border: 0;
+//       resize: none;
+//       padding: 1.5em;
+//       font-size: 14px;
+//       font-family: Consolas, 'Courier New', Courier, monospace;
+
+//       &:focus {
+//         outline: none;
+//       }
+//     }
+
+//     button {
+//       cursor: pointer;
+//     }
+//   }
+
+//   &__input,
+//   &__output {
+//     position: relative;
+//     flex-grow: 1;
+//     flex-shrink: 1;
+//     width: 50%;
+//   }
+
+//   &__border {
+//     width: 1px;
+//     background-color: #eee;
+//   }
+
+//   &__result {
+//     position: absolute;
+//     left: 0;
+//     top: 41px;
+//     right: 0;
+//     bottom: 0;
+//     border: 0;
+//     padding: 1em;
+//     font-size: 14px;
+//     overflow: auto;
+//     background-color: rgb(248, 248, 255);
+
+//     pre {
+//       font-family: Consolas, 'Courier New', Courier, monospace;
+//       margin-top: 0;
+//       margin-bottom: 0;
+
+//       code[data-type="keyword"] {
+//         color: #cf222e;
+//       }
+
+//       code[data-type="identifier"] {
+//         font-weight: bold;
+//       }
+
+//       code[data-type="operator"] {
+//         color: #24292f;
+//       }
+
+//       code[data-type="key"] {
+//         color: #0550ae;
+//       }
+
+//       code[data-type="type"] {
+//         color: #509c93;
+//       }
+//     }
+//   }
+
+//   &__toolbar-container {
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     right: 0;
+//     height: 41px;
+//     border-bottom: 1px solid #ececec;
+//     box-sizing: border-box;
+//   }
+
+//   &__toolbar {
+//     line-height: 40px;
+//     padding: 0 14px;
+//   }
+// }

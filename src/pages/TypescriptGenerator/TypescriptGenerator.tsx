@@ -16,7 +16,6 @@ export const TypescriptGenerator: React.FC<Props> = () => {
 
   const handleInput: React.ChangeEventHandler<HTMLTextAreaElement> = React.useCallback((e) => {
     setSourceCode(e.target.value);
-    sessionStorage.setItem(KEY, e.target.value);
   }, []);
 
   const result = React.useMemo(() => {
@@ -48,6 +47,10 @@ export const TypescriptGenerator: React.FC<Props> = () => {
     }
   }, [sourceCode]);
 
+  React.useEffect(() => {
+    sessionStorage.setItem(KEY, sourceCode);
+  }, [sourceCode]);
+
   const [copyStatus, setCopyStatus] = React.useState<'success' | 'error' | 'initial'>('initial');
   const timerIdRef = React.useRef<{ id?: number; }>({});
 
@@ -64,7 +67,8 @@ export const TypescriptGenerator: React.FC<Props> = () => {
               type="button"
               onClick={() => {
                 try {
-                  setSourceCode(JSON.stringify(JSON.parse(sourceCode), null, 2));
+                  const beautified = JSON.stringify(JSON.parse(sourceCode), null, 2);
+                  setSourceCode(beautified);
                 } catch (err) {
                   // nothing
                 }
